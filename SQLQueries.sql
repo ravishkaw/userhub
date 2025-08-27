@@ -175,3 +175,13 @@ BEGIN
 
     SELECT * FROM vw_UsersWithRoles WHERE Id = @UserId;
 END;
+
+
+-- Stored procedure for get all roles
+CREATE PROCEDURE sp_GetAllRoles
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT * FROM Roles;
+END;
