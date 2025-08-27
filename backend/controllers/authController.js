@@ -50,9 +50,9 @@ const login = async (req, res) => {
       message: "Login successful",
       token,
       user: {
-        Id,
-        Email,
-        Role,
+        id: Id,
+        email: Email,
+        role: Role,
       },
     });
   } catch (error) {

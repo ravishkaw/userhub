@@ -19,36 +19,36 @@ const getUserById = async (id) => {
 };
 
 const createUser = async (userData) => {
-  const { FullName, Email, Password, PhoneNumber, DateOfBirth, RoleId } =
+  const { fullName, email, password, phoneNumber, dateOfBirth, roleId } =
     userData;
 
-  const hashedPassword = await bcrypt.hash(Password, 12);
+  const hashedPassword = await bcrypt.hash(password, 12);
 
   const pool = await poolPromise;
   const result = await pool
     .request()
-    .input("FullName", sql.NVarChar, FullName)
-    .input("Email", sql.NVarChar, Email)
+    .input("FullName", sql.NVarChar, fullName)
+    .input("Email", sql.NVarChar, email)
     .input("PasswordHash", sql.NVarChar, hashedPassword)
-    .input("PhoneNumber", sql.NVarChar, PhoneNumber)
-    .input("DateOfBirth", sql.Date, DateOfBirth)
-    .input("RoleId", sql.Int, RoleId)
+    .input("PhoneNumber", sql.NVarChar, phoneNumber)
+    .input("DateOfBirth", sql.Date, dateOfBirth)
+    .input("RoleId", sql.Int, roleId)
     .execute("sp_RegisterUser");
 
   return result.recordset[0];
 };
 
 const updateUser = async (id, userData) => {
-  const { PhoneNumber, DateOfBirth, RoleId } = userData;
+  const { phoneNumber, dateOfBirth, roleId } = userData;
 
   const pool = await poolPromise;
 
   const result = await pool
     .request()
     .input("UserId", sql.Int, id)
-    .input("PhoneNumber", sql.NVarChar, PhoneNumber || null)
-    .input("DateOfBirth", sql.Date, DateOfBirth || null)
-    .input("RoleId", sql.Int, RoleId || null)
+    .input("PhoneNumber", sql.NVarChar, phoneNumber || null)
+    .input("DateOfBirth", sql.Date, dateOfBirth || null)
+    .input("RoleId", sql.Int, roleId || null)
     .execute("sp_UpdateUser");
 
   return result.recordset[0];
