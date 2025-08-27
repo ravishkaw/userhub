@@ -10,7 +10,6 @@ const register = async (req, res) => {
     const user = await userModel.createUser(req.body);
     res.status(201).json({ message: "User registered successfully", user });
   } catch (error) {
-    console.error("Error registering user:", error?.originalError?.message);
     if (error.originalError) {
       return res.status(400).json({
         message:
@@ -55,7 +54,6 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error logging in:", error);
     res.status(500).json({ message: "Error logging in", error });
   }
 };
