@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/roles", roleRoutes);
+app.use("/api/roles", protect, roleRoutes);
 app.use("/api/users", protect, userRoutes);
 
 const startServer = async () => {
