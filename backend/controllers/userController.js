@@ -2,6 +2,13 @@ const userModel = require("../models/userModel");
 
 const getAllUsers = async (req, res) => {
   try {
+    console.log(req.user);
+
+    if (req.user.role !== "Admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to view this resource" });
+    }
     const users = await userModel.getAllUsers();
     res.status(200).json(users);
   } catch (error) {
@@ -13,6 +20,11 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
+    if (req.user.role !== "Admin" || req.user.id !== req.params.id) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to view this resource" });
+    }
     const { id } = req.params;
     const user = await userModel.getUserById(id);
     if (!user) {
@@ -45,6 +57,12 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update users" });
+    }
+
     const { id } = req.params;
     const updatedUser = await userModel.updateUser(id, req.body);
     res.status(200).json({
@@ -74,6 +92,12 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    if (req.user.role !== "Admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to delete users" });
+    }
+
     const { id } = req.params;
     const deletedUser = await userModel.deleteUser(id);
     res.status(200).json({
