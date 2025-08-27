@@ -103,7 +103,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT * FROM uw_UsersWithRoles WHERE Id = @UserId;
+	SELECT * FROM vw_UsersWithRoles WHERE Id = @UserId;
 End;
 
 
