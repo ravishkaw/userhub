@@ -83,16 +83,15 @@ END;
 
 -- Stored procedure for get user when login
 CREATE PROCEDURE sp_LoginUser
-	@Email NVARCHAR(100),
-	@PasswordHash NVARCHAR(200)
+	@Email NVARCHAR(100)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT u.Id, u.FullName, u.Email, u.PhoneNumber, u.DateOfBirth, r.RoleName AS Role, u.IsActive, u.CreatedAt, u.UpdatedAt
+	SELECT u.Id, u.FullName, u.Email, u.PasswordHash, u.PhoneNumber, u.DateOfBirth, r.RoleName AS Role, u.IsActive, u.CreatedAt, u.UpdatedAt
 	FROM Users u 
 	JOIN Roles r ON u.RoleId = r.RoleId
-	WHERE u.Email = @Email AND u.PasswordHash = @PasswordHash AND u.IsActive = 1;
+	WHERE u.Email = @Email AND u.IsActive = 1;
 
 END;
 
