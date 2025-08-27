@@ -16,7 +16,9 @@ const register = async (req, res) => {
           error?.originalError?.message || "An unexpected error occurred",
       });
     }
-    res.status(500).json({ message: "Error registering user", error });
+    res
+      .status(500)
+      .json({ message: "Error registering user", error: error.message });
   }
 };
 
@@ -54,7 +56,7 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
+    res.status(500).json({ message: "Error logging in", error: error.message });
   }
 };
 

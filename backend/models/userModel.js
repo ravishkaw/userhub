@@ -1,66 +1,74 @@
 const bcrypt = require("bcryptjs");
 const { sql, poolPromise } = require("../config/db");
 
-const getAllUsers = async (req, res) => {
-  try {
-    const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .query("SELECT * FROM vw_UsersWithRoles");
-    console.log(result);
+const getAllUsers = async () => {
+  const pool = await poolPromise;
+  const result = await pool.request().execute("sp_GetAllUsers");
 
-    res.status(200).json(result.recordset);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching users", error });
-    console.log(error);
-  }
+  return result.recordset;
 };
 
-const getUserById = async (req, res) => {
-  try {
-    const { id } = req.params;
+const getUserById = async (id) => {
+  const pool = await poolPromise;
+  const user = await pool
+    .request()
+    .input("UserId", sql.Int, id)
+    .execute("sp_GetUserById");
 
-    const user = (await poolPromise)
-      .request()
-      .input("UserId", sql.Int, id)
-      .execute("sp_GetUserById");
-
-    if (!user.recordset.length) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json(user.recordset);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching user", error });
-  }
+  return user.recordset[0];
 };
 
 const createUser = async (userData) => {
-  try {
-    const { FullName, Email, Password, PhoneNumber, DateOfBirth, RoleId } =
-      userData;
+  const { FullName, Email, Password, PhoneNumber, DateOfBirth, RoleId } =
+    userData;
 
-    const hashedPassword = await bcrypt.hash(Password, 12);
+  const hashedPassword = await bcrypt.hash(Password, 12);
 
-    const pool = await poolPromise;
-    const result = await pool
-      .request()
-      .input("FullName", sql.NVarChar, FullName)
-      .input("Email", sql.NVarChar, Email)
-      .input("PasswordHash", sql.NVarChar, hashedPassword)
-      .input("PhoneNumber", sql.NVarChar, PhoneNumber)
-      .input("DateOfBirth", sql.Date, DateOfBirth)
-      .input("RoleId", sql.Int, RoleId)
-      .execute("sp_RegisterUser");
+  const pool = await poolPromise;
+  const result = await pool
+    .request()
+    .input("FullName", sql.NVarChar, FullName)
+    .input("Email", sql.NVarChar, Email)
+    .input("PasswordHash", sql.NVarChar, hashedPassword)
+    .input("PhoneNumber", sql.NVarChar, PhoneNumber)
+    .input("DateOfBirth", sql.Date, DateOfBirth)
+    .input("RoleId", sql.Int, RoleId)
+    .execute("sp_RegisterUser");
 
-    return result.recordset[0];
-  } catch (error) {
-    throw error;
-  }
+  return result.recordset[0];
+};
+
+const updateUser = async (id, userData) => {
+  const { PhoneNumber, DateOfBirth, RoleId } = userData;
+
+  const pool = await poolPromise;
+
+  const result = await pool
+    .request()
+    .input("UserId", sql.Int, id)
+    .input("PhoneNumber", sql.NVarChar, PhoneNumber || null)
+    .input("DateOfBirth", sql.Date, DateOfBirth || null)
+    .input("RoleId", sql.Int, RoleId || null)
+    .execute("sp_UpdateUser");
+
+  return result.recordset[0];
+};
+
+const deleteUser = async (id) => {
+  const pool = await poolPromise;
+
+  const result = await pool
+    .request()
+    .input("UserId", sql.Int, id)
+    .execute("sp_DeleteUser");
+
+  return result.recordset[0];
 };
 
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
+  updateUser,
+  deleteUser,
 };
