@@ -32,7 +32,7 @@ const createUser = async (userData) => {
     .input("PasswordHash", sql.NVarChar, hashedPassword)
     .input("PhoneNumber", sql.NVarChar, phoneNumber)
     .input("DateOfBirth", sql.Date, dateOfBirth)
-    .input("RoleId", sql.Int, roleId)
+    .input("RoleId", sql.Int, roleId || 2)
     .execute("sp_RegisterUser");
 
   return result.recordset[0];
