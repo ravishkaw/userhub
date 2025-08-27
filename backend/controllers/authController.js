@@ -10,6 +10,13 @@ const register = async (req, res) => {
     const user = await userModel.createUser(req.body);
     res.status(201).json({ message: "User registered successfully", user });
   } catch (error) {
+    console.error("Error registering user:", error?.originalError?.message);
+    if (error.originalError) {
+      return res.status(400).json({
+        message:
+          error?.originalError?.message || "An unexpected error occurred",
+      });
+    }
     res.status(500).json({ message: "Error registering user", error });
   }
 };
@@ -18,19 +25,22 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-
     const pool = await poolPromise;
     const user = await pool
       .request()
       .input("Email", sql.NVarChar, email)
-      .input("PasswordHash", sql.NVarChar, hashedPassword)
       .execute("sp_LoginUser");
 
-    console.log(user);
-
     if (!user.recordset.length) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const { Id, Email, Role, PasswordHash } = user.recordset[0];
+
+    const isPasswordValid = await bcrypt.compare(password, PasswordHash);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = generateToken(user.recordset[0]);
@@ -39,9 +49,9 @@ const login = async (req, res) => {
       message: "Login successful",
       token,
       user: {
-        id: user.recordset[0].id,
-        email: user.recordset[0].email,
-        role: user.recordset[0].role,
+        Id,
+        Email,
+        Role,
       },
     });
   } catch (error) {

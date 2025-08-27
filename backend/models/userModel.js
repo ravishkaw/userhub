@@ -55,7 +55,7 @@ const createUser = async (userData) => {
 
     return result.recordset[0];
   } catch (error) {
-    throw new Error("Error creating user: " + error.message);
+    throw error;
   }
 };
 
