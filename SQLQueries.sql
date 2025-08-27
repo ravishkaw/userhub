@@ -96,6 +96,15 @@ BEGIN
 END;
 
 
+-- Stored procedure for get all users
+CREATE PROCEDURE sp_GetAllUsers
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT * FROM vw_UsersWithRoles;
+End;
+
 -- Stored procedure for get user by id
 CREATE PROCEDURE sp_GetUserById
 	@UserId INT
@@ -116,6 +125,12 @@ CREATE PROCEDURE sp_UpdateUser
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM Users WHERE Id = @UserId)
+    BEGIN
+        RAISERROR('User not found.', 16, 1);
+        RETURN;
+    END
 
     IF @DateOfBirth IS NOT NULL AND @DateOfBirth >= CAST(GETDATE() AS DATE)
     BEGIN
@@ -146,6 +161,12 @@ CREATE PROCEDURE sp_DeleteUser
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    IF NOT EXISTS (SELECT 1 FROM Users WHERE Id = @UserId)
+    BEGIN
+        RAISERROR('User not found.', 16, 1);
+        RETURN;
+    END
 
     UPDATE Users
     SET IsActive = 0,
