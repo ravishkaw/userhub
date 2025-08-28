@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
+
 import { RoleService } from '../../services/role.service';
 import { Role } from '../../types/role.types';
 
@@ -20,6 +22,7 @@ import { Role } from '../../types/role.types';
   selector: 'app-user-form',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -117,17 +120,15 @@ import { Role } from '../../types/role.types';
         @if (showRoleSelection) {
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Role</mat-label>
-          <mat-select formControlName="role">
+          <mat-select formControlName="roleId">
             @for (role of roles; track role.roleId) {
             <mat-option [value]="role.roleId">{{ role.roleName }}</mat-option>
             }
           </mat-select>
-          @if (userForm.get('role')?.invalid && userForm.get('role')?.touched) {
+          @if (userForm.get('roleId')?.invalid && userForm.get('roleId')?.touched) {
           <mat-error>Please select a role</mat-error>
           }
         </mat-form-field>
-        } @else {
-        <div class="half-width"></div>
         }
       </div>
 
@@ -137,7 +138,7 @@ import { Role } from '../../types/role.types';
         class="full-width submit-button"
         [disabled]="userForm.invalid || isLoading"
       >
-        {{ isLoading ? 'Submitting...' : 'Submit' }}
+        {{ isLoading ? 'Submitting...' : 'Create User' }}
       </button>
     </form>
   `,
@@ -186,7 +187,6 @@ export class UserFormComponent implements OnInit {
 
   @Input() showRoleSelection = false;
   @Input() isLoading = false;
-  @Input() initialData: any = null;
 
   @Output() formSubmit = new EventEmitter<any>();
 
@@ -203,18 +203,7 @@ export class UserFormComponent implements OnInit {
       this.roles = await this.roleService.getAllRoles();
 
       if (this.showRoleSelection) {
-        let resolvedRoleId: number | '' = '';
-
-        if (this.initialData?.roleId) {
-          resolvedRoleId = this.initialData.roleId;
-        } else if (this.initialData?.role) {
-          const matchedRole = this.roles.find(
-            (role) => role.roleName.toLowerCase() === this.initialData.role.toLowerCase()
-          );
-          resolvedRoleId = matchedRole ? matchedRole.roleId : '';
-        }
-
-        this.userForm.get('role')?.setValue(resolvedRoleId || 2);
+        this.userForm.get('roleId')?.setValue(2);
       }
     } catch (error) {
       console.error('Error loading roles:', error);
@@ -224,7 +213,7 @@ export class UserFormComponent implements OnInit {
       ];
 
       if (this.showRoleSelection) {
-        this.userForm.get('role')?.setValue(2);
+        this.userForm.get('roleId')?.setValue(2);
       }
     }
   }
@@ -232,8 +221,8 @@ export class UserFormComponent implements OnInit {
   private initializeForm(): void {
     this.userForm = this.formBuilder.group(
       {
-        fullName: [this.initialData?.fullName || '', [Validators.required]],
-        email: [this.initialData?.email || '', [Validators.required, Validators.email]],
+        fullName: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
         password: [
           '',
           [
@@ -243,17 +232,11 @@ export class UserFormComponent implements OnInit {
           ],
         ],
         confirmPassword: ['', [Validators.required]],
-        phoneNumber: [
-          this.initialData?.phoneNumber || '',
-          [Validators.required, Validators.pattern(/^\d+$/)],
-        ],
-        dateOfBirth: [
-          this.initialData?.dateOfBirth || '',
-          [Validators.required, this.pastDateValidator],
-        ],
+        phoneNumber: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+        dateOfBirth: ['', [Validators.required, this.pastDateValidator]],
         ...(this.showRoleSelection
           ? {
-              role: ['', [Validators.required]],
+              roleId: ['', [Validators.required]],
             }
           : {}),
       },
@@ -291,10 +274,9 @@ export class UserFormComponent implements OnInit {
         formData.dateOfBirth = new Date(formData.dateOfBirth).toISOString().split('T')[0];
       }
 
-      if (this.showRoleSelection && formData.role) {
-        formData.roleId = formData.role;
+      if (!this.showRoleSelection) {
+        formData.roleId = 2;
       }
-      delete formData.role;
 
       this.formSubmit.emit(formData);
     }
