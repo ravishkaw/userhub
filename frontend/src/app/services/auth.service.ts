@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { User, RegisterData, LoginData, AuthResponse } from '../types';
@@ -8,11 +8,12 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
+  private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.loadStoredUser();
   }
 
