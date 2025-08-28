@@ -29,7 +29,7 @@ import { MatCardModule } from '@angular/material/card';
       </mat-sidenav>
 
       <mat-sidenav-content class="main-content">
-        <app-header [currentUser]="currentUser" (sidenavToggle)="sidenav.toggle()" />
+        <app-header (sidenavToggle)="sidenav.toggle()" />
         <div class="content">
           <mat-card appearance="outlined" class="content-card">
             <router-outlet />

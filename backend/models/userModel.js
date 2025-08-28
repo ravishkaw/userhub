@@ -1,11 +1,14 @@
 const bcrypt = require("bcryptjs");
 const { sql, poolPromise } = require("../config/db");
+const {
+  mapDbRowToCamelCase,
+  mapArrayToCamelCase,
+} = require("../utils/caseMapper");
 
 const getAllUsers = async () => {
   const pool = await poolPromise;
   const result = await pool.request().execute("sp_GetAllUsers");
-
-  return result.recordset;
+  return mapArrayToCamelCase(result.recordset);
 };
 
 const getUserById = async (id) => {
@@ -15,7 +18,7 @@ const getUserById = async (id) => {
     .input("UserId", sql.Int, id)
     .execute("sp_GetUserById");
 
-  return user.recordset[0];
+  return mapDbRowToCamelCase(user.recordset[0]);
 };
 
 const createUser = async (userData) => {
@@ -35,7 +38,7 @@ const createUser = async (userData) => {
     .input("RoleId", sql.Int, roleId || 2)
     .execute("sp_RegisterUser");
 
-  return result.recordset[0];
+  return mapDbRowToCamelCase(result.recordset[0]);
 };
 
 const updateUser = async (id, userData) => {
@@ -51,7 +54,7 @@ const updateUser = async (id, userData) => {
     .input("RoleId", sql.Int, roleId || null)
     .execute("sp_UpdateUser");
 
-  return result.recordset[0];
+  return mapDbRowToCamelCase(result.recordset[0]);
 };
 
 const deleteUser = async (id) => {
@@ -62,7 +65,7 @@ const deleteUser = async (id) => {
     .input("UserId", sql.Int, id)
     .execute("sp_DeleteUser");
 
-  return result.recordset[0];
+  return mapDbRowToCamelCase(result.recordset[0]);
 };
 
 module.exports = {

@@ -5,7 +5,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
-import { UserFormComponent } from '../user-form/user-form.component';
+import { UserFormComponent } from '../user/user-form.component';
 
 @Component({
   selector: 'app-register',

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../types/user.types';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,6 +20,13 @@ import { CommonModule } from '@angular/common';
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
+
+      @if (isAdmin) {
+      <a mat-list-item routerLink="/manage-users" routerLinkActive="active">
+        <mat-icon matListItemIcon>group</mat-icon>
+        <span matListItemTitle>Manage Users</span>
+      </a>
+      }
 
       <a mat-list-item routerLink="/profile" routerLinkActive="active">
         <mat-icon matListItemIcon>person</mat-icon>
@@ -49,4 +58,16 @@ import { CommonModule } from '@angular/common';
     `,
   ],
 })
-export class SidebarComponent {}
+export class SidebarComponent implements OnInit {
+  private authService = inject(AuthService);
+
+  currentUser: User | null = null;
+  isAdmin = false;
+
+  ngOnInit(): void {
+    this.authService.currentUser.subscribe((user) => {
+      this.currentUser = user;
+      this.isAdmin = user?.role === 'Admin';
+    });
+  }
+}

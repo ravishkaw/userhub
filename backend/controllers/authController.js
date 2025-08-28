@@ -1,9 +1,11 @@
 const bcrypt = require("bcryptjs");
 
-const userModel = require("../models/userModel");
-const generateToken = require("../utils/generateToken");
-
 const { sql, poolPromise } = require("../config/db");
+
+const userModel = require("../models/userModel");
+
+const generateToken = require("../utils/generateToken");
+const { mapDbRowToCamelCase } = require("../utils/caseMapper");
 
 const register = async (req, res) => {
   try {
@@ -36,29 +38,21 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const { Id, Email, Role, PasswordHash, FullName } = user.recordset[0];
+    const userData = mapDbRowToCamelCase(user.recordset[0]);
+    const { id, email: userEmail, role, passwordHash, fullName } = userData;
 
-    const isPasswordValid = await bcrypt.compare(password, PasswordHash);
+    const isPasswordValid = await bcrypt.compare(password, passwordHash);
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken({
-      id: Id,
-      email: Email,
-      role: Role,
-    });
+    const token = generateToken({ id, email: userEmail, role });
 
     res.status(200).json({
       message: "Login successful",
       token,
-      user: {
-        id: Id,
-        email: Email,
-        role: Role,
-        fullName: FullName,
-      },
+      user: { id, email: userEmail, role, fullName },
     });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
@@ -68,7 +62,6 @@ const login = async (req, res) => {
 const getMe = async (req, res) => {
   try {
     const userId = req.user.id;
-
     const pool = await poolPromise;
     const result = await pool
       .request()
@@ -79,16 +72,14 @@ const getMe = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const user = result.recordset[0];
+    const user = mapDbRowToCamelCase(result.recordset[0]);
     res.status(200).json({
-      user: {
-        id: user.Id,
-        email: user.Email,
-        fullName: user.FullName,
-        role: user.Role,
-        phoneNumber: user.PhoneNumber,
-        dateOfBirth: user.DateOfBirth,
-      },
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      phoneNumber: user.phoneNumber,
+      dateOfBirth: user.dateOfBirth,
     });
   } catch (error) {
     res
