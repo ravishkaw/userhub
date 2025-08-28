@@ -7,7 +7,6 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../types';
 
 @Component({
   selector: 'app-header',
@@ -22,10 +21,6 @@ import { User } from '../../types';
       <span class="greeting">{{ getGreeting() }}</span>
 
       <span class="spacer"></span>
-
-      @if (currentUser) {
-      <span class="user-info">{{ currentUser.fullName }} ({{ currentUser.role }})</span>
-      }
 
       <button matButton="outlined" (click)="logout()">
         <mat-icon>logout</mat-icon>
@@ -68,7 +63,6 @@ export class HeaderComponent {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  @Input() currentUser: User | null = null;
   @Output() sidenavToggle = new EventEmitter<void>();
 
   toggleSidenav(): void {
