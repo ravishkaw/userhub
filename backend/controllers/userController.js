@@ -18,7 +18,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    if (req.user.role !== "Admin" || req.user.id !== req.params.id) {
+    if (req.user.role !== "Admin" && req.user.id !== req.params.id) {
       return res
         .status(403)
         .json({ message: "You are not authorized to view this resource" });
