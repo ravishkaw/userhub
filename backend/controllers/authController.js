@@ -36,7 +36,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const { Id, Email, Role, PasswordHash } = user.recordset[0];
+    const { Id, Email, Role, PasswordHash, FullName } = user.recordset[0];
 
     const isPasswordValid = await bcrypt.compare(password, PasswordHash);
 
@@ -57,6 +57,7 @@ const login = async (req, res) => {
         id: Id,
         email: Email,
         role: Role,
+        fullName: FullName,
       },
     });
   } catch (error) {
@@ -64,4 +65,36 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const getMe = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("Id", sql.Int, userId)
+      .execute("sp_GetUserById");
+
+    if (!result.recordset.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = result.recordset[0];
+    res.status(200).json({
+      user: {
+        id: user.Id,
+        email: user.Email,
+        fullName: user.FullName,
+        role: user.Role,
+        phoneNumber: user.PhoneNumber,
+        dateOfBirth: user.DateOfBirth,
+      },
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user profile", error: error.message });
+  }
+};
+
+module.exports = { register, login, getMe };
