@@ -132,8 +132,7 @@ import { Role } from '../../types/role.types';
       </div>
 
       <button
-        mat-raised-button
-        color="primary"
+        matButton="filled"
         type="submit"
         class="full-width submit-button"
         [disabled]="userForm.invalid || isLoading"
