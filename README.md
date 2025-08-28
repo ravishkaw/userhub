@@ -118,7 +118,7 @@ The application automatically creates a default admin user when the server start
 - **Email**: `admin@userhub.com`
 - **Password**: `Admin123@`
 
-## API Testing
+## 📋 API Testing
 
 ### Postman Collection
 
