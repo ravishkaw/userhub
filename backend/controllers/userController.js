@@ -2,8 +2,6 @@ const userModel = require("../models/userModel");
 
 const getAllUsers = async (req, res) => {
   try {
-    console.log(req.user);
-
     if (req.user.role !== "Admin") {
       return res
         .status(403)
