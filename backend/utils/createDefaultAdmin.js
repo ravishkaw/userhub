@@ -40,7 +40,7 @@ const createDefaultAdmin = async () => {
 
     console.log("✅ Default admin user created successfully");
     console.log("📧 Email: admin@userhub.com");
-    console.log("🔑 Password: admin123");
+    console.log("🔑 Password: Admin123@");
 
     return result.recordset[0];
   } catch (error) {
