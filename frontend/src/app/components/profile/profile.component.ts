@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
@@ -10,15 +9,12 @@ import { User } from '../../types';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatSnackBarModule, CommonModule],
+  imports: [MatButtonModule, MatSnackBarModule, CommonModule],
   template: `
     <div class="profile">
       <h1>Profile</h1>
 
       @if (currentUser) {
-
-      <mat-card-title>User Information</mat-card-title>
-
       <div class="profile-field">
         <label>Full Name:</label>
         <span>{{ currentUser.fullName }}</span>
@@ -34,17 +30,16 @@ import { User } from '../../types';
         <span class="role-badge">{{ currentUser.role }}</span>
       </div>
 
-      @if (currentUser.phoneNumber) {
       <div class="profile-field">
         <label>Phone Number:</label>
         <span>{{ currentUser.phoneNumber }}</span>
       </div>
-      } @if (currentUser.dateOfBirth) {
       <div class="profile-field">
         <label>Date of Birth:</label>
         <span>{{ formatDate(currentUser.dateOfBirth) }}</span>
       </div>
-      }} @if (isLoading) {
+
+      @if (currentUser.phoneNumber) { } @if (currentUser.dateOfBirth) { }} @if (isLoading) {
       <p>Loading...</p>
       }
     </div>
@@ -59,11 +54,6 @@ import { User } from '../../types';
       .profile h1 {
         color: #1976d2;
         margin-bottom: 24px;
-      }
-
-      .profile-card,
-      .loading-card {
-        margin-bottom: 20px;
       }
 
       .profile-field {
@@ -142,7 +132,7 @@ export class ProfileComponent implements OnInit {
 
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('en-LK', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

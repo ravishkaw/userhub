@@ -3,10 +3,10 @@ export interface User {
   email: string;
   fullName: string;
   role: string;
-  phoneNumber?: string;
-  dateOfBirth?: string;
-  isActive?: boolean;
-  createdAt?: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  isActive: boolean;
+  createdAt: string;
   updatedAt?: string | null;
 }
 
