@@ -24,7 +24,7 @@ cd userhub
 
 ### 2. Database Setup
 
-1. **Create the Database**: Open SQL Server Management Studio and Execute the contents of SQLQueries.sql file.
+1. **Create the Database**: Open SQL Server Management Studio and Execute the contents of `docs/SQLQueries.sql file`.
 
 ### 3. Backend Setup
 
@@ -117,3 +117,13 @@ The application automatically creates a default admin user when the server start
 
 - **Email**: `admin@userhub.com`
 - **Password**: `Admin123@`
+
+## API Testing
+
+### Postman Collection
+
+Import the Postman collection to test API endpoints:
+
+1. Install [Postman](https://www.postman.com/downloads/)
+2. Import `docs/Userhub.postman_collection.json`
+

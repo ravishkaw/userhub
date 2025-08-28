@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "350fb457-d8af-4b3c-bcd0-a898bfdcb1b5",
+		"name": "Userhub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39419552"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\":\"Ravishka Wijerathne\",\r\n    \"email\":\"ravishka@gmail.com\",\r\n    \"password\":\"Testing123@\", \r\n    \"phoneNumber\": \"0771234567\", \r\n    \"dateOfBirth\":\"2000-01-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/auth/register",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"admin@userhub.com\",\r\n    \"password\":\"Admin123@\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkB1c2VyaHViLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NjM2Njk5NCwiZXhwIjoxNzU2NDUzMzk0fQ.i1nAJQM-fNAPRzrIojn1of2ZUJS7iJTu4vSkd5Ofss4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get single user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkB1c2VyaHViLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NjM2Njk5NCwiZXhwIjoxNzU2NDUzMzk0fQ.i1nAJQM-fNAPRzrIojn1of2ZUJS7iJTu4vSkd5Ofss4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/users/1",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkB1c2VyaHViLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NjM2Njk5NCwiZXhwIjoxNzU2NDUzMzk0fQ.i1nAJQM-fNAPRzrIojn1of2ZUJS7iJTu4vSkd5Ofss4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"phoneNumber\": \"0754489704\", \r\n    \"dateOfBirth\":\"2001-03-26\",\r\n    \"roleId\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/users/2",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkB1c2VyaHViLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NjM2Njk5NCwiZXhwIjoxNzU2NDUzMzk0fQ.i1nAJQM-fNAPRzrIojn1of2ZUJS7iJTu4vSkd5Ofss4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/users/4",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all roles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkB1c2VyaHViLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc1NjM2Njk5NCwiZXhwIjoxNzU2NDUzMzk0fQ.i1nAJQM-fNAPRzrIojn1of2ZUJS7iJTu4vSkd5Ofss4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/api/roles",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:5000"
+		}
+	]
+}
