@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, MatListModule, MatIconModule],
+  imports: [RouterModule, MatListModule, MatIconModule, CommonModule],
   template: `
     <div class="sidenav-header">
       <h3>UserHub</h3>
