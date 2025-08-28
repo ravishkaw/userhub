@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -20,6 +21,7 @@ import { AuthService } from '../../services/auth.service';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
+    CommonModule,
   ],
   template: `
     <div class="login-container">

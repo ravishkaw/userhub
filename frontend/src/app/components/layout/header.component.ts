@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../types';
@@ -11,7 +12,7 @@ import { User } from '../../types';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSnackBarModule, CommonModule],
   template: `
     <mat-toolbar color="primary" class="header">
       <button matIconButton (click)="toggleSidenav()" class="menu-button">

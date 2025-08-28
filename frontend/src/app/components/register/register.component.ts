@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 import { UserFormComponent } from '../user-form/user-form.component';
@@ -9,7 +10,7 @@ import { UserFormComponent } from '../user-form/user-form.component';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterModule, MatCardModule, MatSnackBarModule, UserFormComponent],
+  imports: [RouterModule, MatCardModule, MatSnackBarModule, UserFormComponent, CommonModule],
   template: `
     <div class="register-container">
       <mat-card class="register-card">

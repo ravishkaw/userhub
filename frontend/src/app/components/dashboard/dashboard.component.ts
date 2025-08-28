@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../types';
@@ -8,7 +9,7 @@ import { User } from '../../types';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule],
+  imports: [MatCardModule, MatButtonModule, CommonModule],
   template: `
     <div class="dashboard">
       @if (currentUser) {

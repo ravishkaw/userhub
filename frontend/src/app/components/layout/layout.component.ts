@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../types';
@@ -19,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
     HeaderComponent,
     SidebarComponent,
+    CommonModule,
   ],
   template: `
     <mat-sidenav-container class="layout-container">

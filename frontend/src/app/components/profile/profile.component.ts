@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../types';
@@ -9,7 +10,7 @@ import { User } from '../../types';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatSnackBarModule],
+  imports: [MatCardModule, MatButtonModule, MatSnackBarModule, CommonModule],
   template: `
     <div class="profile">
       <h1>Profile</h1>
@@ -43,9 +44,7 @@ import { User } from '../../types';
         <label>Date of Birth:</label>
         <span>{{ formatDate(currentUser.dateOfBirth) }}</span>
       </div>
-      }} 
-      
-      @if (isLoading) {
+      }} @if (isLoading) {
       <p>Loading...</p>
       }
     </div>
