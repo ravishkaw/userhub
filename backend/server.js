@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const { poolPromise } = require("./config/db");
 const protect = require("./middleware/authMiddleware");
+const { createDefaultAdmin } = require("./utils/createDefaultAdmin");
 
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -23,6 +24,9 @@ const startServer = async () => {
   try {
     await poolPromise;
     console.log("Database connected successfully");
+
+    await createDefaultAdmin();
+
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
