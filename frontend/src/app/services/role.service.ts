@@ -13,14 +13,7 @@ export class RoleService {
 
   async getAllRoles(): Promise<Role[]> {
     try {
-      const roles = await firstValueFrom(
-        this.http.get<{ RoleId: number; RoleName: string }[]>(`${this.apiUrl}/roles`)
-      );
-
-      return roles.map((r) => ({
-        roleId: r.RoleId,
-        roleName: r.RoleName,
-      }));
+      return await firstValueFrom(this.http.get<Role[]>(`${this.apiUrl}/roles`));
     } catch (error) {
       throw error;
     }

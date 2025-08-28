@@ -6,7 +6,7 @@ export interface RegisterData {
   password: string;
   phoneNumber: string;
   dateOfBirth: string;
-  role: string;
+  roleId: number;
 }
 
 export interface LoginData {

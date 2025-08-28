@@ -54,14 +54,12 @@ export class AuthService {
 
   async getMe(): Promise<User> {
     try {
-      const response = await firstValueFrom(
-        this.http.get<{ user: User }>(`${this.apiUrl}/auth/me`)
-      );
+      const response = await firstValueFrom(this.http.get<User>(`${this.apiUrl}/auth/me`));
 
-      this.currentUserSubject.next(response.user);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      this.currentUserSubject.next(response);
+      localStorage.setItem('user', JSON.stringify(response));
 
-      return response.user;
+      return response;
     } catch (error) {
       throw error;
     }
