@@ -72,7 +72,7 @@ const getMe = async (req, res) => {
     const pool = await poolPromise;
     const result = await pool
       .request()
-      .input("Id", sql.Int, userId)
+      .input("userId", sql.Int, userId)
       .execute("sp_GetUserById");
 
     if (!result.recordset.length) {
