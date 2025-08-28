@@ -18,7 +18,9 @@ export class AuthService {
 
   async register(userData: RegisterData): Promise<any> {
     try {
-      const response = await firstValueFrom(this.http.post(`${this.apiUrl}/register`, userData));
+      const response = await firstValueFrom(
+        this.http.post(`${this.apiUrl}/auth/register`, userData)
+      );
       return response;
     } catch (error) {
       throw error;
@@ -28,7 +30,7 @@ export class AuthService {
   async login(loginData: LoginData): Promise<AuthResponse> {
     try {
       const response = await firstValueFrom(
-        this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData)
+        this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, loginData)
       );
 
       if (response.token) {
@@ -51,7 +53,9 @@ export class AuthService {
 
   async getMe(): Promise<User> {
     try {
-      const response = await firstValueFrom(this.http.get<{ user: User }>(`${this.apiUrl}/me`));
+      const response = await firstValueFrom(
+        this.http.get<{ user: User }>(`${this.apiUrl}/auth/me`)
+      );
 
       this.currentUserSubject.next(response.user);
       localStorage.setItem('user', JSON.stringify(response.user));
