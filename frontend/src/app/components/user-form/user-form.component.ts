@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { RoleService } from '../../services/role.service';
+import { Role } from '../../types/role.types';
 
 @Component({
   selector: 'app-user-form',
@@ -116,8 +118,9 @@ import { MatNativeDateModule } from '@angular/material/core';
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
-            <mat-option value="User">User</mat-option>
-            <mat-option value="Admin">Admin</mat-option>
+            @for (role of roles; track role.roleId) {
+            <mat-option [value]="role.roleId">{{ role.roleName }}</mat-option>
+            }
           </mat-select>
           @if (userForm.get('role')?.invalid && userForm.get('role')?.touched) {
           <mat-error>Please select a role</mat-error>
@@ -180,6 +183,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 })
 export class UserFormComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
+  private roleService = inject(RoleService);
 
   @Input() showRoleSelection = false;
   @Input() isLoading = false;
@@ -188,9 +192,42 @@ export class UserFormComponent implements OnInit {
   @Output() formSubmit = new EventEmitter<any>();
 
   userForm!: FormGroup;
+  roles: Role[] = [];
 
   ngOnInit(): void {
     this.initializeForm();
+    this.loadRoles();
+  }
+
+  private async loadRoles(): Promise<void> {
+    try {
+      this.roles = await this.roleService.getAllRoles();
+
+      if (this.showRoleSelection) {
+        let resolvedRoleId: number | '' = '';
+
+        if (this.initialData?.roleId) {
+          resolvedRoleId = this.initialData.roleId;
+        } else if (this.initialData?.role) {
+          const matchedRole = this.roles.find(
+            (role) => role.roleName.toLowerCase() === this.initialData.role.toLowerCase()
+          );
+          resolvedRoleId = matchedRole ? matchedRole.roleId : '';
+        }
+
+        this.userForm.get('role')?.setValue(resolvedRoleId || 2);
+      }
+    } catch (error) {
+      console.error('Error loading roles:', error);
+      this.roles = [
+        { roleId: 1, roleName: 'Admin' },
+        { roleId: 2, roleName: 'User' },
+      ];
+
+      if (this.showRoleSelection) {
+        this.userForm.get('role')?.setValue(2);
+      }
+    }
   }
 
   private initializeForm(): void {
@@ -215,10 +252,11 @@ export class UserFormComponent implements OnInit {
           this.initialData?.dateOfBirth || '',
           [Validators.required, this.pastDateValidator],
         ],
-        role: [
-          this.showRoleSelection ? this.initialData?.role || 'User' : 'User',
-          [Validators.required],
-        ],
+        ...(this.showRoleSelection
+          ? {
+              role: ['', [Validators.required]],
+            }
+          : {}),
       },
       { validators: this.passwordMatchValidator }
     );
@@ -253,6 +291,11 @@ export class UserFormComponent implements OnInit {
       if (formData.dateOfBirth) {
         formData.dateOfBirth = new Date(formData.dateOfBirth).toISOString().split('T')[0];
       }
+
+      if (this.showRoleSelection && formData.role) {
+        formData.roleId = formData.role;
+      }
+      delete formData.role;
 
       this.formSubmit.emit(formData);
     }
